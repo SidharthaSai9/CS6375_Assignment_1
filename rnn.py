@@ -34,7 +34,7 @@ class RNN(nn.Module):
         # [to fill] obtain output layer representations
         output, hidden = self.rnn(inputs)
         # [to fill] sum over output 
-        output_sum =output.sum(dim=1)
+        output_sum =output[-1]
         # [to fill] obtain probability dist.
         predicted_vector = self.W(output_sum)
         predicted_vector = self.softmax(predicted_vector)
