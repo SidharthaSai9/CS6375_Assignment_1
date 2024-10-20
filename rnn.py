@@ -151,17 +151,33 @@ if __name__ == "__main__":
         print("Validation started for epoch {}".format(epoch + 1))
         valid_data = valid_data
 
-        for input_words, gold_label in tqdm(valid_data):
-            input_words = " ".join(input_words)
-            input_words = input_words.translate(input_words.maketrans("", "", string.punctuation)).split()
-            vectors = [word_embedding[i.lower()] if i.lower() in word_embedding.keys() else word_embedding['unk'] for i
-                       in input_words]
+        #errors = []
 
-            vectors = torch.tensor(np.array (vectors)).view(len(vectors), 1, -1)
-            output = model(vectors)
-            predicted_label = torch.argmax(output)
-            correct += int(predicted_label == gold_label)
-            total += 1
+# Model evaluation for validation data
+    for input_words, gold_label in tqdm(valid_data):
+        input_words = " ".join(input_words)
+        input_words = input_words.translate(input_words.maketrans("", "", string.punctuation)).split()
+        vectors = [word_embedding[i.lower()] if i.lower() in word_embedding.keys() else word_embedding['unk'] for i in input_words]
+        
+        vectors = torch.tensor(np.array(vectors)).view(len(vectors), 1, -1)
+        output = model(vectors)
+        predicted_label = torch.argmax(output)
+
+    #if predicted_label != gold_label:
+        #errors.append((input_words, gold_label, predicted_label))
+
+        #correct += int(predicted_label == gold_label)
+        #total += 1
+            # print(predicted_label, gold_label)
+        print("Validation completed for epoch {}".format(epoch + 1))
+        print("Validation accuracy for epoch {}: {}".format(epoch + 1, correct / total))
+        validation_accuracy = correct/total
+        #print("========== Errors ==========")
+        #for index, (input_words, gold_label, predicted_label) in enumerate(errors):
+            #print(f"Error {index + 1}:")
+           #print(f"Text: {' '.join(input_words)}")
+            #print(f"True Label: {gold_label}, Predicted Label: {predicted_label}")
+            #print()
             # print(predicted_label, gold_label)
         print("Validation completed for epoch {}".format(epoch + 1))
         print("Validation accuracy for epoch {}: {}".format(epoch + 1, correct / total))
